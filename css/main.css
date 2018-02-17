@@ -10,17 +10,36 @@ body
   transition: 1s;
 }
 
+div.label
+{
+  background-color:rgba(255,255,255,0.8);
+  position: absolute;
+  margin-top:-30px;
+  margin-left:-2px;
+  z-index: 100;
+  padding:3px;
+  color:black;
+}
+
 .toolbar
 {
   width:100%;
   text-align: center;
 }
 
+.room
+{
+  position: absolute;
+  border:1px dashed rgba(255,255,255,0.5);
+  z-index: 9;
+}
 
 h1
 {
-  padding:10px 10px 0px 20px;
-  font-size:1.5em;
+  font-size:1.2em;
+  padding:25px;
+  color:white;
+  background: black;
 }
 
 
@@ -36,16 +55,29 @@ h1
     border: 2px solid #182f57;
 }
 
+.customtile
+{
+  position: absolute;
+  top:0px;
+  left:0px;
+  width:100%;
+}
 
+
+.widget_ph
+{
+  width:320px;
+  height:600px;
+  position: fixed;
+}
 
 .widget
 {
   width:320px;
-  height:200px;
   background-color: white;
-  position:fixed;
+  padding:10px;
   box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.3);
-  padding-left:10px;
+
 }
 
 
@@ -113,6 +145,7 @@ background-color:#b71c1c;
 {
   height:90px;
   border:2px solid #1a1a1a;
+  padding:0px;
   background:#1c1c1c;
 }
 

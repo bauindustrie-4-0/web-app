@@ -9,7 +9,7 @@ var notifications = [
 {title : "Schadstoff-Belastung", x : 10, y : 10, Source : "A0001"},
 {title : "Defekt", x : 2, y : 8, Source : "A0001"},
 {title : "Gang-Sperrung", x : 7, y : 8, Source : "A0001"},
-{title : "Betriebs-Störung", x : 7, y : 2, Source : "A0001"}
+{title : "Fehlerhaft", x : 7, y : 2, Source : "A0001"}
 ];
 
 //Alle hinterlegten Beacons
@@ -26,11 +26,43 @@ arrToListGroup = function(arr)
 
   $.each(arr,function(index,elem)
   {
-    ret.append($("<a/>").attr("href","#").text(elem));
+    ret.append($("<a/>").attr("class","list-group-item").attr("href","#").text(elem));
   });
 
   return ret;
 }
+
+displayNotifications = function()
+{
+  //fetch über die apikey
+  var arr = [];
+
+  $.each(notifications,function(index,elem)
+  {
+    arr.push(elem.title);
+  });
+
+  $("#div_notifications").html("");
+  $("#div_notifications").append(arrToListGroup(arr));
+
+}
+
+
+displayBeacons= function()
+{
+  //fetch über die apikey
+  var arr = [];
+
+  $.each(beacons,function(index,elem)
+  {
+    arr.push(elem.ID);
+  });
+
+  $("#div_beacons").html("");
+  $("#div_beacons").append(arrToListGroup(arr));
+
+}
+
 
 //Allgemeine Einstellungen / Anzeigezustand
 class Settings
@@ -67,8 +99,11 @@ class webApi
     return beacons;
   }
 
+
+
   getNotificationsForBeacon(ID)
   {
+
     return notifications;
   }
 
@@ -77,9 +112,11 @@ class webApi
 
 class Map
 {
-  constructor(name,structure) {
+  constructor(name,structure,customtiles,labels) {
 	this.name = name;
   this.structure = structure;
+  this.customtiles = customtiles;
+  this.labels = labels;
 	}
 
   redraw(parent)
@@ -90,14 +127,21 @@ class Map
 
   drawElement(parent)
   {
+    var currentRoom = $("<div/>").attr("class","room");
+
     for(var h = 0;h<this.structure.length;h++)
     {
       var row = $("<div/>").attr("class","row mapRow");
 
       for(var w = 0;w<this.structure[0].length;w++)
       {
-        var appendobj = $("<div/>").attr("data-h",h).attr("data-w",w).attr("class","col-1 mapCol "+marker[this.structure[h][w]]);
+        var appendobj = $("<div/>").attr("title",w+","+h).attr("data-h",h).attr("data-w",w).attr("class","col-1 mapCol "+marker[this.structure[h][w]]);
 
+        //Custom-Tile vorhanden
+        if(this.customtiles[h][w] >0)
+        {
+        appendobj.append($("<img/>").attr("src","img/customtiles/"+this.customtiles[h][w]+".png").attr("class","customtile"));
+        }
 
         if($("#cb_warning").prop("checked"))
         {
@@ -112,6 +156,26 @@ class Map
         });
       }
 
+
+              if($("#cb_labels").prop("checked"))
+              {
+              //Prüfe, ob eine Notification für dieses Feld vorliegt
+              $.each(this.labels, function(index,elem)
+              {
+                  if(w == elem.x && h == elem.y)
+                  {
+                    //Füge das "Widget" mit Warnmeldung hinzu
+                    currentRoom.css("width",(elem.w*95)+"px");
+                    currentRoom.css("height",(elem.h*90)+"px");
+                    currentRoom.append($("<div/>").attr("class","label").html(elem.name));
+                    appendobj.append(currentRoom);
+                    currentRoom = $("<div/>").attr("class","room");
+                  }
+              });
+            }
+
+
+
       if($("#cb_beacons").prop("checked"))
       {
         //Prüfe, ob ein Beacon für dieses Feld vorliegt
@@ -123,9 +187,6 @@ class Map
           }
         });
       }
-
-
-
         row.append(appendobj);
       }
       parent.append(row);
@@ -137,5 +198,8 @@ class Map
     $(".container").html("");
     Room.drawElement($(".container"));
     })
+
+    displayNotifications(); //Anzeigen der Notifications
+    displayBeacons(); //Anzeigen der Beacons
   }
 }
