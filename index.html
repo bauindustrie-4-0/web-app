@@ -1,0 +1,128 @@
+<html>
+<head>
+  <title>SafePlace</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="css/main.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+      <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#"> <i class="material-icons left">network_locked</i> SafePlace - Sicherer arbeiten</a>
+      </nav>
+
+ <div class="container">
+
+ </div>
+
+ <div class="widget" style="top:60px;right:40px;">
+<h1>
+      <i class="material-icons">location_on</i> Kraftwerk – City Accelerator Bremen</h1>
+<hr/>
+<div class ="toolbar">
+<div class="btn-group" role="group" aria-label="Basic example">
+  <button type="button" id ="viewmode"  class="btn btn-secondary">Ansicht</button>
+  <button type="button" id ="editmode" class="btn btn-secondary">Bearbeitung</button>
+  <button type="button" id ="beaconmode"  class="btn btn-secondary">Beacon</button>
+</div>
+</div>
+</div>
+
+<div class="widget" style="top:60px;left:40px;">
+<h1>
+     <i class="material-icons">visibility</i> Ansicht</h1>
+<hr/>
+<p>
+<input type ="checkbox" id ="cb_beacons" checked/><label for ="cb_beacons"> Beacons einblenden</label>
+</p>
+<p>
+<input type ="checkbox" id ="cb_warning" checked/><label for ="cb_warning"> Warnungen einblenden</label>
+</p>
+
+
+</div>
+</div>
+
+
+ <div class="widget" style="top:270px;right:40px;">
+<h1>
+      <i class="material-icons left">notifications</i> Benachrichtigungen</h1>
+<hr/>
+<div id ="div_notifications"></div>
+
+
+
+ </div>
+
+
+ <div class="widget" style="top:490px;right:40px;">
+ <h1>
+      <i class="material-icons">network_wifi</i> Beacons</h1>
+ <hr/>
+
+
+ <div id ="div_beacons"></div>
+
+
+
+ </div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src ="js/main.js"></script>
+<script type ="text/javascript">
+
+var Einstellungen = new Settings();
+
+//Initialisiere Raum
+var Room = new Map("Karte",
+[
+  [0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,1,1,1,1,1,0,0],
+  [0,0,0,0,0,1,1,1,1,1,0,0],
+  [0,0,0,0,0,1,1,1,1,1,1,0],
+  [0,0,0,0,0,1,1,1,1,1,1,0],
+  [0,0,0,0,0,1,1,1,1,1,1,0],
+  [0,0,0,0,0,0,0,1,0,0,0,0],
+  [0,0,1,1,1,1,0,1,0,0,0,0],
+  [0,0,1,1,1,1,0,1,0,0,0,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0]
+]
+);
+
+$("input[type=checkbox]").change(function(){ Room.redraw($(".container")); });
+
+Room.drawElement($(".container"));
+
+$("#viewmode").click(function(){
+Einstellungen.mode = 0;
+Einstellungen.update();
+});
+
+$("#editmode").click(function(){
+Einstellungen.mode = 1;
+Einstellungen.update();
+});
+
+$("#beaconmode").click(function(){
+Einstellungen.mode = 2;
+Einstellungen.update();
+});
+
+
+</script>
+
+</body>
+</html>
