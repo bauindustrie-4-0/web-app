@@ -88,9 +88,9 @@ class Settings
   }
 }
 
-//var data =[
-//  {"beacon":{"id":"CA:90:6C:4D:1D:2D","rssi":-52,"tx":0,"counter":0},"content":[{"type":"info","content":"Der Dicke"}]}
-//];
+var demodata =[
+  {"beacon":{"id":"CA:90:6C:4D:1D:2D","rssi":-52,"tx":0,"counter":0},"content":[{"type":"info","content":"Der Dicke"}]}
+];
 
 
 function DoEvent(data)
@@ -113,6 +113,7 @@ function DoEvent(data)
                     text:   toast.content,
                     heading: elem2.ID,
                        icon: toast.type,
+                         hideAfter: 10000,
                     showHideTransition: 'slide'
                     });
                   });
