@@ -14,9 +14,12 @@ var notifications = [
 
 //Alle hinterlegten Beacons
 var beacons = [
-{ID : "A0001", x : 6, y : 6},
-{ID : "A0002", x : 3, y : 12}
+{ID : "CA:90:6C:4D:1D:2D", name : "Der Dicke", x : 10, y : 3, active: false},
+{ID : "C9:43:D8:4E:15:23", name : "Der Genervte", x : 10, y : 5, active: false}
 ];
+
+
+
 
 
 //Nimmt ein Array an und gibt eine Bootstrap List-Group zurück
@@ -64,6 +67,7 @@ displayBeacons= function()
 }
 
 
+
 //Allgemeine Einstellungen / Anzeigezustand
 class Settings
 {
@@ -79,10 +83,62 @@ class Settings
   //Aktualisiert die CSS-Klasse des Containers (=> Aktualisiert durch redraw die Event-Handler)
   update()
   {
-    $(".container").attr("class","container "+modes[this.mode]);
-    Room.redraw($(".container")); //Neu zeichnen, um Events zu aktualisieren
+    $(".mapcontainer").attr("class","mapcontainer "+modes[this.mode]);
+    Room.redraw($(".mapcontainer")); //Neu zeichnen, um Events zu aktualisieren
   }
 }
+
+//var data =[
+//  {"beacon":{"id":"CA:90:6C:4D:1D:2D","rssi":-52,"tx":0,"counter":0},"content":[{"type":"info","content":"Der Dicke"}]}
+//];
+
+
+function DoEvent(data)
+{
+        $.each(data,function(index,elem){
+
+          var found = false; //ugly
+
+          //finde Beacon in der DB
+            $.each(beacons,function(index2,elem2){
+
+              if(elem.beacon.id == elem2.ID) //Mac-Adresse stimmt überein
+              {
+                found = true;
+                  elem2.active = true;
+                  Room.redraw($(".mapcontainer"));
+
+                  $.each(elem.content,function(tindex,toast){
+                    $.toast({
+                    text:   toast.content,
+                    heading: elem2.ID,
+                       icon: toast.type,
+                    showHideTransition: 'slide'
+                    });
+                  });
+              }
+            });
+
+            if(!found)
+            {
+              $.toast({
+              text:   elem.beacon.id,
+              heading: "Unbekanntes Beacon",
+                 icon: "error",
+              showHideTransition: 'slide'
+              });
+            }
+
+        });
+}
+
+const evtSource = new EventSource('http://serene-lowlands-55462.herokuapp.com/beaconinfo_stream');
+
+    evtSource.onmessage = function (e) {
+        let data = JSON.parse(e.data);
+        DoEvent(data)
+};
+
 
 
 //Verbindung zur Web-Api
@@ -98,8 +154,6 @@ class webApi
   {
     return beacons;
   }
-
-
 
   getNotificationsForBeacon(ID)
   {
@@ -131,11 +185,11 @@ class Map
 
     for(var h = 0;h<this.structure.length;h++)
     {
-      var row = $("<div/>").attr("class","row mapRow");
+      var row = $("<div/>").attr("class","mapRow");
 
       for(var w = 0;w<this.structure[0].length;w++)
       {
-        var appendobj = $("<div/>").attr("title",w+","+h).attr("data-h",h).attr("data-w",w).attr("class","col-1 mapCol "+marker[this.structure[h][w]]);
+        var appendobj = $("<div/>").attr("title",w+","+h).attr("data-h",h).attr("data-w",w).attr("class","mapCol "+marker[this.structure[h][w]]);
 
         //Custom-Tile vorhanden
         if(this.customtiles[h][w] >0)
@@ -182,8 +236,19 @@ class Map
         $.each(beacons, function(index,elem){
           if(w == elem.x && h == elem.y)
           {
+
+            var beaconelem = $("<div/>").attr("class","beacon").html("<i class = 'material-icons'>network_wifi</i> ");
+
+            if(elem.active)
+            {
+              beaconelem.addClass("wifi");
+            }
+
           //Füge Beacon in das Div-Element ein
-          appendobj.append($("<div/>").attr("class","beacon").html("<i class = 'material-icons'>network_wifi</i> "+elem.ID));
+          appendobj.append(beaconelem);
+
+
+
           }
         });
       }
@@ -195,8 +260,8 @@ class Map
     //Click-Eventhandler, falls der Bearbeitungsmodus (Einstellungen.mode == 1) aktiviert wurde
     $(".edit .mapCol").click(function(){
     Room.structure[parseFloat($(this).attr("data-h"))][parseFloat($(this).attr("data-w"))] = 1;
-    $(".container").html("");
-    Room.drawElement($(".container"));
+    $(".mapcontainer").html("");
+    Room.drawElement($(".mapcontainer"));
     })
 
     displayNotifications(); //Anzeigen der Notifications

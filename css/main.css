@@ -61,6 +61,7 @@ h1
   top:0px;
   left:0px;
   width:100%;
+  height:100%;
 }
 
 
@@ -88,17 +89,21 @@ h1
   height:250px;
   text-align: center;
   padding-top:100px;
-  border:5px solid white;
+  border:5px solid rgba(255,255,255,0.5);
   border-radius: 300px;
-  margin-left:-90px;
+  margin-left:-80px;
   margin-top:-82px;
-  opacity:0.2;
+  opacity:0.1;
   color:white;
   background-color:rgba(255,255,255,0.1);
   font-weight:bold;
   position: absolute;
-  animation: wifi 1s infinite;
   z-index:20;
+}
+
+.beacon.active
+{
+  opacity: 1;
 }
 
 
@@ -123,6 +128,20 @@ h1
   z-index:20;
 }
 
+.mapRow
+{
+  clear:both;
+  width:100%;
+}
+
+.mapcontainer
+{
+  width:1200px;
+  min-width:1200px;
+  overflow:scroll;
+}
+
+
 .arrow
 {
   background-image:url(../img/arrow.png);
@@ -144,8 +163,10 @@ background-color:#b71c1c;
 .mapCol
 {
   height:90px;
+  width:95px;
+  position: relative;
   border:2px solid #1a1a1a;
-  padding:0px;
+  float:left;
   background:#1c1c1c;
 }
 
@@ -159,6 +180,11 @@ background-color:#b71c1c;
   padding-top:5vh;
 }
 
+.wifi
+{
+  animation: wifi 1s infinite;
+}
+
 @-webkit-keyframes warning {
     0% {    margin-top:0px;}
     50% {    margin-top:5px;}
@@ -166,9 +192,9 @@ background-color:#b71c1c;
 }
 
 @-webkit-keyframes wifi {
-    0% {   opacity:0.3;}
-    50% {    opacity:0.6;}
-    100% {    opacity:0.3;}
+    0% {   opacity:0.1;}
+    50% {    opacity:0.9;}
+    100% {    opacity:0.1;}
 }
 
 @-webkit-keyframes alert {
