@@ -14,8 +14,8 @@ var notifications = [
 
 //Alle hinterlegten Beacons
 var beacons = [
-{ID : "CA:90:6C:4D:1D:2D", name : "Der Dicke", x : 10, y : 3, active: false},
-{ID : "C9:43:D8:4E:15:23", name : "Der Genervte", x : 10, y : 5, active: false}
+{ID : "CA:90:6C:4D:1D:2D", name : "3D Drucker", x : 3, y : 10, active: false},
+{ID : "C9:43:D8:4E:15:23", name : "Device", x : 5, y : 10, active: false}
 ];
 
 
