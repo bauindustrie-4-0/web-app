@@ -96,12 +96,21 @@ var demodata =[
 
 function DoEvent(data)
 {
+
+      $.each(beacons,function(index,b){
+        b.active = false;
+      });
+
+
         $.each(data,function(index,elem){
 
           var found = false; //ugly
 
           //finde Beacon in der DB
             $.each(beacons,function(index2,elem2){
+
+
+
 
               if(elem.beacon.id == elem2.ID) //Mac-Adresse stimmt überein
               {
