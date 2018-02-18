@@ -109,24 +109,21 @@ function DoEvent(data)
           //finde Beacon in der DB
             $.each(beacons,function(index2,elem2){
 
-
-
-
-              if(elem.beacon.id == elem2.ID) //Mac-Adresse stimmt überein
+              if(elem.beacon.id === elem2.ID) //Mac-Adresse stimmt überein
               {
                 found = true;
-                  elem2.active = true;
-                  Room.redraw($(".mapcontainer"));
 
-                  $.each(elem.content,function(tindex,toast){
-                    $.toast({
-                    text:   toast.content,
-                    heading: elem2.ID,
-                       icon: toast.type,
-                         hideAfter: 10000,
-                    showHideTransition: 'slide'
-                    });
+                elem2.active = true;
+
+                $.each(elem.content,function(tindex,toast){
+                  $.toast({
+                  text:   toast.content,
+                  heading: elem2.ID,
+                     icon: toast.type,
+                       hideAfter: 10000,
+                  showHideTransition: 'slide'
                   });
+                });
               }
             });
 
@@ -141,6 +138,9 @@ function DoEvent(data)
             }
 
         });
+
+
+        Room.redraw($(".mapcontainer"));
 }
 
 const evtSource = new EventSource('http://serene-lowlands-55462.herokuapp.com/beaconinfo_stream');
